@@ -1,8 +1,10 @@
 /**
  * AuthLayout - Common layout for auth pages
+ * Uses approved SVG logo files per DESIGN-RULES Section 9
  */
 
-import { StaFullLogo } from '@shared/components';
+// Logo path - dark background uses dark variant (white "Stā" + red "Full")
+const LOGO_SRC = '/logos/stafull-logo-dark-transparent.svg';
 
 export function AuthLayout({ children }) {
   return (
@@ -10,7 +12,7 @@ export function AuthLayout({ children }) {
       <aside className="auth-sidebar">
         <div className="auth-sidebar-content">
           <div className="auth-logo">
-            <StaFullLogo size="lg" />
+            <img src={LOGO_SRC} alt="StāFull" className="auth-logo-img" />
           </div>
           <h1 className="auth-tagline">
             Mobile Fuel Delivery,<br />
