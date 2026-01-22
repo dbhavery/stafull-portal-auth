@@ -1,5 +1,8 @@
 # StaFull Auth Portal
 
+> **DESIGN AUTHORITY**: `stafull-design-system/src/stafull-system.css` (HIGHEST)
+> **DESIGN RULES**: See `stafull-shared/docs/rules/DESIGN-RULES.md` for all design rules.
+
 ## Overview
 Unified authentication portal for all StaFull users. Handles sign-in, sign-up, email verification, and terms acceptance.
 
