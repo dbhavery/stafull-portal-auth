@@ -1,0 +1,553 @@
+/**
+ * StaFull Driver Portal Styles
+ * Dark theme optimized for tablet displays in vehicle
+ * Uses CSS custom properties from tokens.css
+ */
+
+.page {
+  min-height: 100vh;
+  background: #0a0a0a;
+  color: var(--sf-text-primary);
+  font-family: var(--sf-font-family);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mode Indicator (Demo Controls) */
+.modeIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sf-spacing-md);
+  padding: var(--sf-spacing-md);
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.modeLabel {
+  font-size: var(--sf-font-size-sm);
+  color: var(--sf-text-muted);
+}
+
+.modeTabs {
+  display: flex;
+  gap: var(--sf-spacing-xs);
+}
+
+.modeTab {
+  padding: 6px 14px;
+  border-radius: var(--sf-radius-pill);
+  font-family: var(--sf-font-family);
+  font-size: var(--sf-font-size-sm);
+  font-weight: var(--sf-font-weight-medium);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  color: var(--sf-text-muted);
+  cursor: pointer;
+  transition: all var(--sf-transition-fast);
+}
+
+.modeTab:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.modeTabActive {
+  background: var(--sf-gradient-red);
+  border-color: var(--sf-red);
+  color: var(--sf-text-primary);
+}
+
+.modeContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================
+   DASHBOARD MODE
+   ============================================ */
+
+.dashboardMode {
+  padding: var(--sf-spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sf-spacing-lg);
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Clock Section */
+.clockSection {
+  text-align: center;
+  padding: var(--sf-spacing-xl) 0;
+}
+
+.clockBtn {
+  width: 100%;
+  max-width: 400px;
+  padding: var(--sf-spacing-xl) var(--sf-spacing-2xl);
+  border-radius: var(--sf-radius-card);
+  font-family: var(--sf-font-family);
+  font-size: var(--sf-font-size-2xl);
+  font-weight: var(--sf-font-weight-bold);
+  letter-spacing: 0.05em;
+  border: none;
+  cursor: pointer;
+  transition: transform var(--sf-transition-fast), box-shadow var(--sf-transition-fast);
+}
+
+.clockBtn:active {
+  transform: scale(0.98);
+}
+
+.clockedOut {
+  background: var(--sf-gradient-green);
+  color: #000;
+  box-shadow:
+    0 8px 24px rgba(0, 255, 0, 0.3),
+    0 1px 0 rgba(255, 255, 255, 0.3) inset;
+}
+
+.clockedIn {
+  background: var(--sf-gradient-yellow);
+  color: #000;
+  box-shadow:
+    0 8px 24px rgba(234, 179, 8, 0.3),
+    0 1px 0 rgba(255, 255, 255, 0.3) inset;
+}
+
+.clockStatus {
+  margin-top: var(--sf-spacing-md);
+  font-size: var(--sf-font-size-sm);
+  color: var(--sf-text-muted);
+}
+
+/* Cards */
+.card {
+  background: linear-gradient(180deg, #1a1a1a 0%, #0f0f0f 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--sf-radius-card);
+  overflow: hidden;
+}
+
+.cardTitle {
+  font-size: var(--sf-font-size-sm);
+  font-weight: var(--sf-font-weight-semibold);
+  color: var(--sf-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: var(--sf-spacing-md) var(--sf-spacing-lg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.cardContent {
+  padding: var(--sf-spacing-lg);
+}
+
+/* Route Summary */
+.routeSummary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sf-spacing-md);
+  text-align: center;
+}
+
+.routeItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.routeValue {
+  font-size: var(--sf-font-size-4xl);
+  font-weight: var(--sf-font-weight-bold);
+}
+
+.routeLabel {
+  font-size: var(--sf-font-size-2xs);
+  color: var(--sf-text-muted);
+}
+
+/* Status Grid */
+.statusGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sf-spacing-md);
+}
+
+.statusItem {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--sf-spacing-sm);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--sf-radius-sm);
+}
+
+.statusLabel {
+  font-size: var(--sf-font-size-sm);
+  color: var(--sf-text-muted);
+}
+
+.statusValue {
+  font-size: var(--sf-font-size-sm);
+  font-weight: var(--sf-font-weight-semibold);
+}
+
+/* Next Stop */
+.nextStop {
+  text-align: center;
+}
+
+.nextStopName {
+  font-size: var(--sf-font-size-xl);
+  font-weight: var(--sf-font-weight-semibold);
+  margin-bottom: var(--sf-spacing-xs);
+}
+
+.nextStopAddress {
+  font-size: var(--sf-font-size-sm);
+  color: var(--sf-text-muted);
+  margin-bottom: var(--sf-spacing-xs);
+}
+
+.nextStopFuel {
+  font-size: var(--sf-font-size-sm);
+  color: var(--sf-success);
+  font-weight: var(--sf-font-weight-medium);
+  margin-bottom: var(--sf-spacing-lg);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border-radius: var(--sf-radius-button);
+  font-family: var(--sf-font-family);
+  font-size: var(--sf-font-size-base);
+  font-weight: var(--sf-font-weight-semibold);
+  border: none;
+  cursor: pointer;
+  transition: transform var(--sf-transition-fast);
+}
+
+.btnPrimary {
+  background: var(--sf-gradient-red);
+  color: var(--sf-text-primary);
+  box-shadow: var(--sf-shadow-button);
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   DRIVER MODE (Full-screen Navigation)
+   ============================================ */
+
+.driverMode {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.fullscreenMap {
+  flex: 1;
+  position: relative;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+  background-size: 40px 40px, 40px 40px, 100% 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mapContent {
+  text-align: center;
+}
+
+.mapPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sf-spacing-md);
+}
+
+.mapIcon {
+  color: var(--sf-red);
+  opacity: 0.8;
+}
+
+.navText {
+  font-size: var(--sf-font-size-xl);
+  color: var(--sf-text-muted);
+}
+
+.navEta {
+  font-size: var(--sf-font-size-3xl);
+  font-weight: var(--sf-font-weight-bold);
+  color: var(--sf-text-primary);
+}
+
+/* Customer Popup */
+.customerPopup {
+  position: absolute;
+  top: var(--sf-spacing-lg);
+  right: var(--sf-spacing-lg);
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--sf-radius-card);
+  padding: var(--sf-spacing-lg);
+  min-width: 220px;
+  backdrop-filter: blur(10px);
+}
+
+.popupHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--sf-spacing-sm);
+}
+
+.popupLabel {
+  font-size: var(--sf-font-size-2xs);
+  color: var(--sf-text-muted);
+  text-transform: uppercase;
+}
+
+.popupDistance {
+  font-size: var(--sf-font-size-sm);
+  color: var(--sf-success);
+  font-weight: var(--sf-font-weight-semibold);
+}
+
+.popupName {
+  font-size: var(--sf-font-size-lg);
+  font-weight: var(--sf-font-weight-semibold);
+  margin-bottom: var(--sf-spacing-xs);
+}
+
+.popupFuel {
+  font-size: var(--sf-font-size-sm);
+  color: var(--sf-warning);
+  margin-bottom: var(--sf-spacing-xs);
+}
+
+.popupAddress {
+  font-size: var(--sf-font-size-sm);
+  color: var(--sf-text-muted);
+}
+
+/* Arrive Button */
+.arriveBtn {
+  position: absolute;
+  bottom: var(--sf-spacing-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--sf-spacing-lg) var(--sf-spacing-3xl);
+  background: var(--sf-gradient-green);
+  color: #000;
+  border: none;
+  border-radius: var(--sf-radius-card);
+  font-family: var(--sf-font-family);
+  font-size: var(--sf-font-size-xl);
+  font-weight: var(--sf-font-weight-bold);
+  cursor: pointer;
+  box-shadow:
+    0 8px 24px rgba(0, 255, 0, 0.3),
+    0 1px 0 rgba(255, 255, 255, 0.3) inset;
+  transition: transform var(--sf-transition-fast);
+}
+
+.arriveBtn:active {
+  transform: translateX(-50%) scale(0.98);
+}
+
+/* ============================================
+   DELIVERY MODE (SOP Enforcement)
+   ============================================ */
+
+.deliveryMode {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--sf-spacing-lg);
+  gap: var(--sf-spacing-lg);
+}
+
+.deliveryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--sf-spacing-md);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.deliveryTitle {
+  font-size: var(--sf-font-size-xl);
+  font-weight: var(--sf-font-weight-semibold);
+}
+
+.deliveryProgress {
+  font-size: var(--sf-font-size-sm);
+  color: var(--sf-text-muted);
+}
+
+/* Checklist */
+.checklistContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sf-spacing-sm);
+  overflow-y: auto;
+}
+
+.checklistItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sf-spacing-md);
+  padding: var(--sf-spacing-lg);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--sf-radius-md);
+  cursor: pointer;
+  transition: all var(--sf-transition-fast);
+}
+
+.checklistItem:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.checklistCompleted {
+  background: rgba(0, 255, 0, 0.05);
+  border-color: rgba(0, 255, 0, 0.2);
+}
+
+.checklistNumber {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--sf-gradient-grey);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--sf-font-size-sm);
+  font-weight: var(--sf-font-weight-semibold);
+  flex-shrink: 0;
+}
+
+.checklistCheckbox {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--sf-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--sf-transition-fast);
+}
+
+.checklistCompleted .checklistCheckbox {
+  background: var(--sf-success);
+  border-color: var(--sf-success);
+}
+
+.checklistCompleted .checklistCheckbox svg {
+  color: #000;
+}
+
+.checklistText {
+  font-size: var(--sf-font-size-base);
+  flex: 1;
+}
+
+.checklistCompleted .checklistText {
+  color: var(--sf-success);
+}
+
+/* Camera Feed */
+.cameraFeed {
+  height: 180px;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--sf-radius-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cameraPlaceholder {
+  text-align: center;
+}
+
+.cameraIcon {
+  color: var(--sf-text-muted);
+  margin-bottom: var(--sf-spacing-sm);
+}
+
+.cameraLabel {
+  font-size: var(--sf-font-size-sm);
+  color: var(--sf-text-muted);
+  margin-bottom: var(--sf-spacing-xs);
+}
+
+.cameraStatus {
+  font-size: var(--sf-font-size-2xs);
+  color: var(--sf-success);
+}
+
+/* Complete Button */
+.completeBtn {
+  padding: var(--sf-spacing-lg) var(--sf-spacing-2xl);
+  border-radius: var(--sf-radius-card);
+  font-family: var(--sf-font-family);
+  font-size: var(--sf-font-size-xl);
+  font-weight: var(--sf-font-weight-bold);
+  border: none;
+  cursor: pointer;
+  transition: all var(--sf-transition-fast);
+}
+
+.completeBtnActive {
+  background: var(--sf-gradient-green);
+  color: #000;
+  box-shadow:
+    0 8px 24px rgba(0, 255, 0, 0.3),
+    0 1px 0 rgba(255, 255, 255, 0.3) inset;
+}
+
+.completeBtnDisabled {
+  background: var(--sf-gradient-grey);
+  color: var(--sf-text-muted);
+  cursor: not-allowed;
+}
+
+/* Responsive - Tablet Landscape Optimization */
+@media (min-width: 768px) and (orientation: landscape) {
+  .deliveryMode {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .deliveryHeader {
+    width: 100%;
+  }
+
+  .checklistContainer {
+    flex: 1;
+    min-width: 300px;
+  }
+
+  .cameraFeed {
+    width: 300px;
+    height: auto;
+    min-height: 200px;
+  }
+
+  .completeBtn {
+    width: 100%;
+  }
+}
