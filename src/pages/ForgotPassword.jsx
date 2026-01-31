@@ -1,111 +1,208 @@
 /**
- * ForgotPassword Page - Password reset request
+ * ForgotPassword Page - StaFull Auth Portal
+ * Handles password reset request and code entry
  */
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { sendVerification } from '@shared/services';
-import AuthLayout from '../components/AuthLayout';
+import { Link, useNavigate } from 'react-router-dom';
+import { authService } from '../services/api';
+import styles from './Auth.module.css';
 
-export function ForgotPassword() {
+export default function ForgotPassword() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [code, setCode] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
+  const [step, setStep] = useState('email'); // email, code, success
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleRequestCode = async () => {
     setError('');
     setLoading(true);
 
-    if (!email) {
-      setError('Please enter your email address');
+    try {
+      await authService.forgotPassword(email);
+      setStep('code');
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to send reset code');
+    } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    setError('');
+
+    if (newPassword !== confirmPassword) {
+      setError('Passwords do not match');
       return;
     }
 
-    // Send password reset email (using verification endpoint for now)
-    const { ok } = await sendVerification(email);
-
-    if (ok) {
-      setSuccess(true);
-    } else {
-      setError('Failed to send reset email. Please try again.');
+    if (newPassword.length < 8) {
+      setError('Password must be at least 8 characters');
+      return;
     }
 
-    setLoading(false);
+    setLoading(true);
+
+    try {
+      await authService.resetPassword(email, code, newPassword);
+      setStep('success');
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to reset password');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (success) {
+  if (step === 'success') {
     return (
-      <AuthLayout>
-        <div className="auth-card">
-          <div className="auth-card-header">
-            <h2 className="auth-card-title">Check your email</h2>
-            <p className="auth-card-subtitle">
-              We sent a password reset link to<br />
-              <strong>{email}</strong>
-            </p>
+      <div className={styles.page}>
+        <div className={styles.container}>
+          <div className={styles.logo}>
+            <span className={styles.logoText}>St<span className={styles.macron}>a</span>Full</span>
           </div>
-
-          <div className="auth-alert success">
-            If an account exists with this email, you will receive password
-            reset instructions shortly.
-          </div>
-
-          <div className="auth-footer">
-            <Link to="/signin" className="auth-link">Back to sign in</Link>
+          <div className={styles.card}>
+            <h1 className={styles.title}>Password reset</h1>
+            <p className={styles.subtitle}>Your password has been successfully reset.</p>
+            <Link to="/signin" className={styles.submitBtn} style={{ textDecoration: 'none', textAlign: 'center' }}>
+              Sign in
+            </Link>
           </div>
         </div>
-      </AuthLayout>
+      </div>
+    );
+  }
+
+  if (step === 'code') {
+    return (
+      <div className={styles.page}>
+        <div className={styles.container}>
+          <div className={styles.logo}>
+            <span className={styles.logoText}>St<span className={styles.macron}>a</span>Full</span>
+          </div>
+
+          <div className={styles.card}>
+            <button onClick={() => setStep('email')} className={styles.backLink}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+              </svg>
+              Back
+            </button>
+
+            <h1 className={styles.title}>Enter reset code</h1>
+            <p className={styles.subtitle}>
+              We sent a 6-digit code to <strong>{email}</strong>
+            </p>
+
+            {error && <div className={styles.error}>{error}</div>}
+
+            <div className={styles.form}>
+              <div className={styles.inputGroup}>
+                <label className={styles.label}>Reset code</label>
+                <input
+                  type="text"
+                  className={styles.input}
+                  value={code}
+                  onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  placeholder="123456"
+                  maxLength={6}
+                  autoFocus
+                />
+              </div>
+
+              <div className={styles.inputGroup}>
+                <label className={styles.label}>New password</label>
+                <input
+                  type="password"
+                  className={styles.input}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="At least 8 characters"
+                />
+              </div>
+
+              <div className={styles.inputGroup}>
+                <label className={styles.label}>Confirm password</label>
+                <input
+                  type="password"
+                  className={styles.input}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Re-enter your password"
+                />
+              </div>
+
+              <button
+                type="button"
+                className={styles.submitBtn}
+                onClick={handleResetPassword}
+                disabled={loading || code.length !== 6 || !newPassword || !confirmPassword}
+              >
+                {loading ? <span className={styles.spinner} /> : 'Reset password'}
+              </button>
+
+              <button
+                type="button"
+                className={styles.linkBtn}
+                onClick={handleRequestCode}
+                disabled={loading}
+              >
+                Resend code
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 
   return (
-    <AuthLayout>
-      <div className="auth-card">
-        <div className="auth-card-header">
-          <h2 className="auth-card-title">Reset your password</h2>
-          <p className="auth-card-subtitle">
-            Enter your email and we&apos;ll send you a reset link
-          </p>
+    <div className={styles.page}>
+      <div className={styles.container}>
+        <div className={styles.logo}>
+          <span className={styles.logoText}>St<span className={styles.macron}>a</span>Full</span>
         </div>
 
-        {error && (
-          <div className="auth-alert error">{error}</div>
-        )}
+        <div className={styles.card}>
+          <Link to="/signin" className={styles.backLink}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Back to sign in
+          </Link>
 
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <div className="auth-input-group">
-            <label className="auth-label" htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              className="auth-input"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              autoFocus
-            />
+          <h1 className={styles.title}>Reset password</h1>
+          <p className={styles.subtitle}>Enter your email and we'll send you a reset code</p>
+
+          {error && <div className={styles.error}>{error}</div>}
+
+          <div className={styles.form}>
+            <div className={styles.inputGroup}>
+              <label className={styles.label}>Email</label>
+              <input
+                type="email"
+                className={styles.input}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                autoFocus
+              />
+            </div>
+
+            <button
+              type="button"
+              className={styles.submitBtn}
+              onClick={handleRequestCode}
+              disabled={loading || !email}
+            >
+              {loading ? <span className={styles.spinner} /> : 'Send reset code'}
+            </button>
           </div>
-
-          <button
-            type="submit"
-            className="auth-button"
-            disabled={loading}
-          >
-            {loading ? 'Sending...' : 'Send Reset Link'}
-          </button>
-        </form>
-
-        <div className="auth-footer">
-          Remember your password?{' '}
-          <Link to="/signin" className="auth-link">Sign in</Link>
         </div>
       </div>
-    </AuthLayout>
+    </div>
   );
 }
-
-export default ForgotPassword;

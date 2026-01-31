@@ -1,141 +1,86 @@
 /**
- * Terms Page - Terms of Service acceptance
+ * Terms Page - StaFull Auth Portal
+ * Terms of Service and Privacy Policy
  */
 
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@shared/hooks';
-import AuthLayout from '../components/AuthLayout';
+import { Link } from 'react-router-dom';
+import styles from './Auth.module.css';
 
-export function Terms() {
-  const navigate = useNavigate();
-  const { acceptTerms, user, loading, getPortalUrl } = useAuth();
-
-  const [accepted, setAccepted] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-
-    if (!accepted) {
-      setError('You must accept the Terms of Service to continue');
-      return;
-    }
-
-    const result = await acceptTerms();
-
-    if (result.success) {
-      // Redirect to appropriate portal
-      if (user) {
-        const portalUrl = getPortalUrl(user.role);
-        window.location.href = portalUrl;
-      } else {
-        navigate('/signin');
-      }
-    } else {
-      setError(result.error || 'Failed to accept terms. Please try again.');
-    }
-  };
-
+export default function Terms() {
   return (
-    <AuthLayout>
-      <div className="auth-card">
-        <div className="auth-card-header">
-          <h2 className="auth-card-title">Terms of Service</h2>
-          <p className="auth-card-subtitle">
-            Please review and accept our terms to continue
-          </p>
+    <div className={styles.page}>
+      <div className={`${styles.container} ${styles.terms}`}>
+        <div className={styles.logo}>
+          <span className={styles.logoText}>St<span className={styles.macron}>a</span>Full</span>
         </div>
 
-        {error && (
-          <div className="auth-alert error">{error}</div>
-        )}
+        <div className={styles.card}>
+          <Link to="/signin" className={styles.backLink}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Back
+          </Link>
 
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <div className="terms-content">
-            <h3>1. Acceptance of Terms</h3>
+          <h1 className={styles.title}>Terms of Service</h1>
+
+          <div className={styles.termsContent}>
+            <h2>1. Acceptance of Terms</h2>
             <p>
-              By accessing and using StaFull&apos;s services, you accept and agree to be bound
-              by the terms and provision of this agreement. If you do not agree to abide
-              by these terms, please do not use our services.
+              By accessing or using StaFull's mobile fuel delivery services, you agree to be bound by these
+              Terms of Service. If you do not agree to these terms, please do not use our services.
             </p>
 
-            <h3>2. Service Description</h3>
+            <h2>2. Service Description</h2>
             <p>
-              StaFull provides mobile fuel delivery management services, including but not
-              limited to route optimization, delivery scheduling, customer management,
-              and financial tracking for franchise operations.
+              StaFull provides on-demand fuel delivery services to residential and commercial customers.
+              Our services include delivery of gasoline, diesel, and DEF (Diesel Exhaust Fluid) to
+              pre-approved locations.
             </p>
 
-            <h3>3. User Responsibilities</h3>
+            <h2>3. User Responsibilities</h2>
+            <ul>
+              <li>Provide accurate vehicle and delivery location information</li>
+              <li>Ensure the vehicle is accessible for fueling</li>
+              <li>Maintain a valid payment method on file</li>
+              <li>Comply with all applicable laws and regulations</li>
+            </ul>
+
+            <h2>4. Payment Terms</h2>
             <p>
-              You are responsible for maintaining the confidentiality of your account
-              credentials and for all activities that occur under your account. You agree
-              to notify StaFull immediately of any unauthorized use of your account.
+              Payment is processed automatically upon completion of delivery. Subscription customers
+              are billed according to their selected plan (weekly, bi-weekly, or annual).
             </p>
 
-            <h3>4. Data Privacy</h3>
+            <h2>5. Cancellation Policy</h2>
             <p>
-              We collect and process personal data in accordance with our Privacy Policy.
-              By using our services, you consent to the collection and use of your
-              information as described therein.
+              Deliveries may be cancelled up to 2 hours before the scheduled delivery window without
+              penalty. Late cancellations may incur a fee.
             </p>
 
-            <h3>5. Intellectual Property</h3>
+            <h2>6. Safety</h2>
             <p>
-              All content, features, and functionality of StaFull services are owned by
-              StaFull Holdings and are protected by international copyright, trademark,
-              and other intellectual property laws.
+              All our delivery vehicles and drivers comply with federal, state, and local safety
+              regulations. Deliveries are performed by trained professionals using approved equipment.
             </p>
 
-            <h3>6. Limitation of Liability</h3>
+            <h2>7. Privacy</h2>
             <p>
-              StaFull shall not be liable for any indirect, incidental, special,
-              consequential, or punitive damages resulting from your use of or inability
-              to use the service.
+              Your personal information is handled in accordance with our Privacy Policy. We collect
+              only the information necessary to provide our services and protect your privacy.
             </p>
 
-            <h3>7. Modifications</h3>
+            <h2>8. Contact</h2>
             <p>
-              StaFull reserves the right to modify these terms at any time. We will
-              notify users of any material changes via email or through the service.
-              Continued use of the service after such modifications constitutes
-              acceptance of the updated terms.
+              For questions about these terms, please contact us at legal@stafull.com.
             </p>
 
-            <h3>8. Governing Law</h3>
-            <p>
-              These terms shall be governed by and construed in accordance with the
-              laws of the State of Delaware, without regard to its conflict of law
-              provisions.
+            <p style={{ marginTop: '30px', fontSize: '0.75rem', color: '#737373' }}>
+              Last updated: January 2026
             </p>
           </div>
-
-          <div className="auth-checkbox-group">
-            <input
-              type="checkbox"
-              id="accept-terms"
-              className="auth-checkbox"
-              checked={accepted}
-              onChange={(e) => setAccepted(e.target.checked)}
-            />
-            <label htmlFor="accept-terms" className="auth-checkbox-label">
-              I have read and agree to the Terms of Service and Privacy Policy
-            </label>
-          </div>
-
-          <button
-            type="submit"
-            className="auth-button"
-            disabled={loading || !accepted}
-          >
-            {loading ? 'Processing...' : 'Accept & Continue'}
-          </button>
-        </form>
+        </div>
       </div>
-    </AuthLayout>
+    </div>
   );
 }
-
-export default Terms;

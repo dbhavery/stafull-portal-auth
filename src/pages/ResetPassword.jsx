@@ -1,27 +1,27 @@
 /**
- * ResetPassword Page - Set new password
+ * ResetPassword Page - StaFull Auth Portal
  */
 
 import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import AuthLayout from '../components/AuthLayout';
+import { authService } from '../services/api';
+import styles from './Auth.module.css';
 
-export function ResetPassword() {
+export default function ResetPassword() {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setError('');
 
-    if (!password || !confirmPassword) {
-      setError('Please fill in all fields');
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
       return;
     }
 
@@ -30,126 +30,104 @@ export function ResetPassword() {
       return;
     }
 
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-
     setLoading(true);
 
-    // TODO: Implement password reset API call
-    // For now, simulate success
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    setSuccess(true);
-    setLoading(false);
+    try {
+      await authService.resetPassword(token, password);
+      setSuccess(true);
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to reset password');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Invalid or missing token
   if (!token) {
     return (
-      <AuthLayout>
-        <div className="auth-card">
-          <div className="auth-card-header">
-            <h2 className="auth-card-title">Invalid Link</h2>
-            <p className="auth-card-subtitle">
-              This password reset link is invalid or has expired.
-            </p>
+      <div className={styles.page}>
+        <div className={styles.container}>
+          <div className={styles.logo}>
+            <span className={styles.logoText}>St<span className={styles.macron}>a</span>Full</span>
           </div>
-
-          <Link to="/forgot-password" className="auth-button" style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>
-            Request New Link
-          </Link>
-
-          <div className="auth-footer">
-            <Link to="/signin" className="auth-link">Back to sign in</Link>
+          <div className={styles.card}>
+            <h1 className={styles.title}>Invalid link</h1>
+            <p className={styles.subtitle}>This password reset link is invalid or has expired.</p>
+            <Link to="/forgot-password" className={styles.submitBtn} style={{ textDecoration: 'none', textAlign: 'center' }}>
+              Request new link
+            </Link>
           </div>
         </div>
-      </AuthLayout>
+      </div>
     );
   }
 
-  // Success state
   if (success) {
     return (
-      <AuthLayout>
-        <div className="auth-card">
-          <div className="auth-card-header">
-            <h2 className="auth-card-title">Password Reset</h2>
-            <p className="auth-card-subtitle">
-              Your password has been successfully reset.
-            </p>
+      <div className={styles.page}>
+        <div className={styles.container}>
+          <div className={styles.logo}>
+            <span className={styles.logoText}>St<span className={styles.macron}>a</span>Full</span>
           </div>
-
-          <div className="auth-alert success">
-            You can now sign in with your new password.
+          <div className={styles.card}>
+            <h1 className={styles.title}>Password reset</h1>
+            <p className={styles.subtitle}>Your password has been successfully reset.</p>
+            <Link to="/signin" className={styles.submitBtn} style={{ textDecoration: 'none', textAlign: 'center' }}>
+              Sign in
+            </Link>
           </div>
-
-          <Link to="/signin" className="auth-button" style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>
-            Sign In
-          </Link>
         </div>
-      </AuthLayout>
+      </div>
     );
   }
 
   return (
-    <AuthLayout>
-      <div className="auth-card">
-        <div className="auth-card-header">
-          <h2 className="auth-card-title">Create new password</h2>
-          <p className="auth-card-subtitle">
-            Enter your new password below
-          </p>
+    <div className={styles.page}>
+      <div className={styles.container}>
+        <div className={styles.logo}>
+          <span className={styles.logoText}>St<span className={styles.macron}>a</span>Full</span>
         </div>
 
-        {error && (
-          <div className="auth-alert error">{error}</div>
-        )}
+        <div className={styles.card}>
+          <h1 className={styles.title}>Set new password</h1>
+          <p className={styles.subtitle}>Enter your new password below</p>
 
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <div className="auth-input-group">
-            <label className="auth-label" htmlFor="password">New Password</label>
-            <input
-              id="password"
-              type="password"
-              className="auth-input"
-              placeholder="At least 8 characters"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="new-password"
-              autoFocus
-            />
+          {error && <div className={styles.error}>{error}</div>}
+
+          <div className={styles.form}>
+            <div className={styles.inputGroup}>
+              <label className={styles.label}>New password</label>
+              <input
+                type="password"
+                className={styles.input}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="At least 8 characters"
+                autoFocus
+              />
+            </div>
+
+            <div className={styles.inputGroup}>
+              <label className={styles.label}>Confirm password</label>
+              <input
+                type="password"
+                className={styles.input}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Re-enter your password"
+              />
+            </div>
+
+            <button
+              type="button"
+              className={styles.submitBtn}
+              onClick={handleSubmit}
+              disabled={loading || !password || !confirmPassword}
+            >
+              {loading ? <span className={styles.spinner} /> : 'Reset password'}
+            </button>
           </div>
-
-          <div className="auth-input-group">
-            <label className="auth-label" htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              id="confirmPassword"
-              type="password"
-              className="auth-input"
-              placeholder="Confirm your password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              autoComplete="new-password"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="auth-button"
-            disabled={loading}
-          >
-            {loading ? 'Resetting...' : 'Reset Password'}
-          </button>
-        </form>
-
-        <div className="auth-footer">
-          <Link to="/signin" className="auth-link">Back to sign in</Link>
         </div>
       </div>
-    </AuthLayout>
+    </div>
   );
 }
-
-export default ResetPassword;

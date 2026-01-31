@@ -1,134 +1,152 @@
 /**
- * SignIn Page
+ * SignIn Page - StaFull Auth Portal
+ * Unified login for all portals with role-based redirect
  */
 
 import { useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { useAuth } from '@shared/hooks';
-import AuthLayout from '../components/AuthLayout';
+import { Link, useSearchParams } from 'react-router-dom';
+import { authService, portalRedirectMap } from '../services/api';
+import styles from './Auth.module.css';
 
-export function SignIn() {
-  const navigate = useNavigate();
+export default function SignIn() {
   const [searchParams] = useSearchParams();
-  const returnUrl = searchParams.get('return');
-
-  const { login, loading } = useAuth();
+  const returnTo = searchParams.get('return');
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
-    if (!email || !password) {
-      setError('Please enter your email and password');
-      return;
-    }
+    try {
+      const data = await authService.login(email, password);
 
-    const result = await login(email, password);
+      // Store tokens
+      localStorage.setItem('token', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
+      localStorage.setItem('user', JSON.stringify(data.user));
 
-    if (result.success) {
-      const user = result.data.user;
-
-      // Check if email needs verification
-      if (!user.emailVerified) {
-        navigate('/verify', { state: { email } });
-        return;
-      }
-
-      // Check if terms need acceptance
-      if (!user.termsAccepted) {
-        navigate('/terms');
-        return;
-      }
-
-      // Redirect to portal or return URL
-      if (returnUrl) {
-        window.location.href = returnUrl;
-      } else {
-        const portalUrl = result.data.portal;
-        const portalUrls = {
-          holdings: 'https://hq.stafull.com',
-          franchise: 'https://app.stafull.com',
-          management: 'https://app.stafull.com',
-          driver: 'https://driver.stafull.com',
-          customer: 'https://my.stafull.com',
-          employer: 'https://my.stafull.com',
-          employee: 'https://my.stafull.com',
-          investor: 'https://my.stafull.com',
-          lender: 'https://my.stafull.com',
-        };
-        window.location.href = portalUrls[portalUrl] || 'https://my.stafull.com';
-      }
-    } else {
-      setError(result.error || 'Invalid email or password');
+      // Redirect to appropriate portal based on role
+      const redirectUrl = returnTo || portalRedirectMap[data.user.role] || '/';
+      window.location.href = redirectUrl;
+    } catch (err) {
+      setError(err.response?.data?.error || 'Invalid email or password');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <AuthLayout>
-      <div className="auth-card">
-        <div className="auth-card-header">
-          <h2 className="auth-card-title">Welcome back</h2>
-          <p className="auth-card-subtitle">Sign in to your StaFull account</p>
+    <div className={styles.page}>
+      <div className={styles.container}>
+        {/* Logo */}
+        <div className={styles.logo}>
+          <img
+            src="/logos/stafull-logo-dark-transparent.svg"
+            alt="StāFull"
+            className={styles.logoImg}
+          />
         </div>
 
-        {error && (
-          <div className="auth-alert error">{error}</div>
+        {/* Card */}
+        <div className={styles.card}>
+          <h1 className={styles.title}>Sign in</h1>
+          <p className={styles.subtitle}>Enter your credentials to continue</p>
+
+          {error && (
+            <div className={styles.error}>{error}</div>
+          )}
+
+          <div className={styles.form}>
+            <div className={styles.inputGroup}>
+              <label className={styles.label}>Email</label>
+              <input
+                type="email"
+                className={styles.input}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                autoComplete="email"
+                autoFocus
+              />
+            </div>
+
+            <div className={styles.inputGroup}>
+              <div className={styles.labelRow}>
+                <label className={styles.label}>Password</label>
+                <Link to="/forgot-password" className={styles.forgotLink} tabIndex={-1}>
+                  Forgot password?
+                </Link>
+              </div>
+              <div className={styles.passwordWrapper}>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  className={styles.input}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  autoComplete="current-password"
+                />
+                <button
+                  type="button"
+                  className={styles.togglePassword}
+                  onClick={() => setShowPassword(!showPassword)}
+                  tabIndex={-1}
+                >
+                  {showPassword ? 'Hide' : 'Show'}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              className={styles.submitBtn}
+              onClick={handleSubmit}
+              disabled={loading || !email || !password}
+            >
+              {loading ? (
+                <span className={styles.spinner} />
+              ) : (
+                'Sign in'
+              )}
+            </button>
+          </div>
+
+          <p className={styles.footer}>
+            Don't have an account?{' '}
+            <Link to="/signup">Create account</Link>
+          </p>
+        </div>
+
+        {/* Test Credentials (dev only) */}
+        {import.meta.env.DEV && (
+          <div className={styles.devPanel}>
+            <div className={styles.devTitle}>Test Accounts</div>
+            <div className={styles.devGrid}>
+              <button onClick={() => { setEmail('admin@test.com'); setPassword('pass'); }} className={styles.devBtn}>
+                Holdings Admin
+              </button>
+              <button onClick={() => { setEmail('owner@test.com'); setPassword('pass'); }} className={styles.devBtn}>
+                Franchise Owner
+              </button>
+              <button onClick={() => { setEmail('manager@test.com'); setPassword('pass'); }} className={styles.devBtn}>
+                Manager
+              </button>
+              <button onClick={() => { setEmail('driver@test.com'); setPassword('pass'); }} className={styles.devBtn}>
+                Driver
+              </button>
+              <button onClick={() => { setEmail('customer@test.com'); setPassword('pass'); }} className={styles.devBtn}>
+                Customer
+              </button>
+            </div>
+          </div>
         )}
-
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <div className="auth-input-group">
-            <label className="auth-label" htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              className="auth-input"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              autoFocus
-            />
-          </div>
-
-          <div className="auth-input-group">
-            <label className="auth-label" htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              className="auth-input"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-            />
-          </div>
-
-          <div style={{ textAlign: 'right' }}>
-            <Link to="/forgot-password" className="auth-link">
-              Forgot password?
-            </Link>
-          </div>
-
-          <button
-            type="submit"
-            className="auth-button"
-            disabled={loading}
-          >
-            {loading ? 'Signing in...' : 'Sign In'}
-          </button>
-        </form>
-
-        <div className="auth-footer">
-          Don&apos;t have an account?{' '}
-          <Link to="/signup" className="auth-link">Sign up</Link>
-        </div>
       </div>
-    </AuthLayout>
+    </div>
   );
 }
-
-export default SignIn;

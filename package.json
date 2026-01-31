@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "StaFull Auth Portal - Sign In, Sign Up, Verification",
+  "description": "StaFull Authentication Portal - Unified Auth Gateway",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 5170",
     "build": "vite build",
     "preview": "vite preview",
     "start": "serve dist -s -l $PORT",
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@stafull/shared": "file:./shared",
+    "axios": "^1.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.0",

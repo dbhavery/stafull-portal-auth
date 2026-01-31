@@ -8,14 +8,25 @@
         font-size: 52px;
         letter-spacing: -0.01em;
       }
+      .stroke-white {
+        stroke: #404040;
+        stroke-width: 1px;
+        paint-order: stroke fill;
+      }
     </style>
+    <!-- 3D gradient for white text (on red backgrounds) -->
+    <linearGradient id="whiteGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#f0f0f0"/>
+      <stop offset="100%" stop-color="#d8d8d8"/>
+    </linearGradient>
   </defs>
 
-  <!-- "StaFull" - all white (for use on red backgrounds) -->
+  <!-- "StaFull" - all white with 3D gradient and stroke (for use on red backgrounds) -->
   <text x="150" y="68" text-anchor="middle" class="logo-text">
-    <tspan fill="#ffffff">StaFull</tspan>
+    <tspan fill="url(#whiteGrad)" class="stroke-white">StaFull</tspan>
   </text>
 
-  <!-- White macron bar above the "a" (for use on red backgrounds) -->
-  <rect x="120" y="32" width="18" height="5" fill="#ffffff" rx="2"/>
+  <!-- White macron bar above the "a" with 3D gradient and stroke (for use on red backgrounds) -->
+  <rect x="120" y="32" width="18" height="5" fill="url(#whiteGrad)" stroke="#404040" stroke-width="1" rx="2"/>
 </svg>

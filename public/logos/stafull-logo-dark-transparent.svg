@@ -8,14 +8,36 @@
         font-size: 52px;
         letter-spacing: -0.01em;
       }
+      .stroke-white {
+        stroke: #404040;
+        stroke-width: 1px;
+        paint-order: stroke fill;
+      }
+      .stroke-red {
+        stroke: #400000;
+        stroke-width: 1px;
+        paint-order: stroke fill;
+      }
     </style>
+    <!-- 3D gradient for white text (on dark backgrounds) -->
+    <linearGradient id="whiteGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#f0f0f0"/>
+      <stop offset="100%" stop-color="#d8d8d8"/>
+    </linearGradient>
+    <!-- 3D gradient for red text -->
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#d40000"/>
+      <stop offset="40%" stop-color="#a30000"/>
+      <stop offset="100%" stop-color="#750000"/>
+    </linearGradient>
   </defs>
 
-  <!-- "StaFull" - white Sta, red Full -->
+  <!-- "StaFull" - white Sta, red Full with 3D gradients (for dark backgrounds) -->
   <text x="150" y="68" text-anchor="middle" class="logo-text">
-    <tspan fill="#ffffff">Sta</tspan><tspan fill="#a30000">Full</tspan>
+    <tspan fill="url(#whiteGrad)" class="stroke-white">Sta</tspan><tspan fill="url(#redGrad)" class="stroke-red">Full</tspan>
   </text>
 
-  <!-- Red macron bar above the "a" -->
-  <rect x="120" y="32" width="18" height="5" fill="#a30000" rx="2"/>
+  <!-- Red macron bar above the "a" with 3D gradient -->
+  <rect x="120" y="32" width="18" height="5" fill="url(#redGrad)" stroke="#400000" stroke-width="1" rx="2"/>
 </svg>

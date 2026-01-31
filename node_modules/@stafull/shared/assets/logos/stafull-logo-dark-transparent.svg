@@ -1,0 +1,21 @@
+<svg width="300" height="100" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&amp;display=swap');
+      .logo-text {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 800;
+        font-size: 52px;
+        letter-spacing: -0.01em;
+      }
+    </style>
+  </defs>
+
+  <!-- "StaFull" - white Sta, red Full -->
+  <text x="150" y="68" text-anchor="middle" class="logo-text">
+    <tspan fill="#ffffff">Sta</tspan><tspan fill="#a30000">Full</tspan>
+  </text>
+
+  <!-- Red macron bar above the "a" -->
+  <rect x="120" y="32" width="18" height="5" fill="#a30000" rx="2"/>
+</svg>
