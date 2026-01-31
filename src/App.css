@@ -6,9 +6,9 @@
 /* CSS Custom Properties from Design System */
 :root {
   /* Background (LIGHTER than cards) */
-  --page-bg: #1e1f22;
-  --card-top: #1a1a1a;
-  --card-bottom: #121212;
+  --page-bg: #1c1d20;
+  --card-top: #181818;
+  --card-bottom: #141414;
   --card-border: rgba(255, 255, 255, 0.04);
 
   /* Brand Colors */
@@ -26,7 +26,7 @@
   --gray-600: #525252;
   --gray-700: #404040;
   --gray-800: #262626;
-  --gray-850: #1e1f22;
+  --gray-850: #1c1d20;
   --gray-900: #171717;
 
   /* Text */
@@ -82,8 +82,8 @@ html, body, #root {
 body {
   font-family: var(--font-family);
   background:
-    radial-gradient(ellipse at 30% 20%, #2a2b2f 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 80%, #252628 0%, transparent 50%),
+    radial-gradient(ellipse at 30% 20%, #222326 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, #202124 0%, transparent 50%),
     var(--page-bg);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;

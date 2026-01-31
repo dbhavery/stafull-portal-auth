@@ -76,7 +76,6 @@
   font-size: var(--sf-font-size-2xs);
   font-weight: var(--sf-font-weight-semibold);
   color: var(--sf-text-muted);
-  text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: var(--sf-spacing-sm);
 }
@@ -145,7 +144,6 @@
 .kpiLabel {
   font-size: var(--sf-font-size-2xs);
   color: var(--sf-text-muted);
-  text-transform: uppercase;
   margin-bottom: var(--sf-spacing-xs);
 }
 
@@ -180,7 +178,6 @@
   font-size: var(--sf-font-size-2xs);
   font-weight: var(--sf-font-weight-semibold);
   color: var(--sf-text-muted);
-  text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: var(--sf-spacing-sm);
   padding-bottom: var(--sf-spacing-xs);

@@ -69,7 +69,6 @@
   font-size: var(--sf-font-size-2xs);
   font-weight: var(--sf-font-weight-semibold);
   color: var(--sf-text-muted);
-  text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: var(--sf-spacing-md);
 }

@@ -84,7 +84,7 @@ export default function SignUp() {
 
         <div className={styles.card}>
           <h1 className={styles.title}>Create account</h1>
-          <p className={styles.subtitle}>Start your fuel delivery journey</p>
+          <p className={styles.subtitle}>Get started with StaFull</p>
 
           {error && <div className={styles.error}>{error}</div>}
 

@@ -103,7 +103,6 @@
   font-size: var(--sf-font-size-sm);
   font-weight: var(--sf-font-weight-semibold);
   color: var(--sf-text-muted);
-  text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: var(--sf-spacing-md) var(--sf-spacing-lg);
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
@@ -291,7 +290,6 @@
 .tierHeader {
   font-size: var(--sf-font-size-2xs);
   color: var(--sf-text-muted);
-  text-transform: uppercase;
   margin-bottom: var(--sf-spacing-xs);
 }
 
